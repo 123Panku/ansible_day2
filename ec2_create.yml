@@ -1,0 +1,27 @@
+- name: Launch EC2 instance
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  
+  vars:
+    ansible_python_interpreter: /home/pankaja/ansible-venv/bin/python
+
+  vars_files:
+    - group_vars/all/pass.yml
+
+  tasks:
+    - name: Launch an EC2 instance
+      amazon.aws.ec2_instance:
+        name: "Ansible-EC2"
+        key_name: "key11"
+        instance_type: "t2.micro"
+        image_id: "ami-004364947f82c87a0"
+        region: "us-east-2"
+        vpc_subnet_id: "subnet-08891a81849709632"
+        network:
+          assign_public_ip: true
+        tags:
+          Environment: Dev
+          Name: AnsibleEC2
+        aws_access_key: "{{ ec2_access_key }}"
+        aws_secret_key: "{{ ec2_secret_key }}"
